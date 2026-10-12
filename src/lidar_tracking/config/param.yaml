@@ -1,65 +1,67 @@
 /**:
   ros__parameters:
     # =============================================================
-    #  lidar_tracking v7 参数 (四态状态机)
-    #  改完不用重编译，重启节点即可 (run_tracked.sh / ros2 launch)
+    #  lidar_tracking v5.1 参数 (唯一调参入口)
+    #  节点无论如何都读【本文件】: ~/racecar/src/lidar_tracking/config/param.yaml
+    #  改完必须【重启节点】才生效 (节点只在启动时读一次)。
     # =============================================================
 
-    # ===== 1. 速度控制 (PWM: 1500=停止, 1530~1560=前进) =====
-    speed_straight: 1590        # 直道巡航全速
-    speed_corner: 1555          # 弯道低速防推头
-    speed_rightangle: 1548      # 直角弯最低速 (v7 新增)
-    danger_slow_drop: 15        # 逼近锥桶额外减速 (别用 30，会一顿一顿)
+    # ===== 1. 速度控制 (PWM: 1500=停止, 1525 低速, 1540 巡航, 1560 快) =====
+    speed_straight: 1535        # 直道巡航 (★想更慢就往下调, 如 1530/1525)
+    speed_corner: 1530          # 常规圆弧弯道
+    speed_sharp: 1520           # 直角弯低速防推头
+    danger_slow_drop: 10        # 逼近锥桶额外减速量
 
-    # ===== 2. 舵机标定 (严守物理对称) =====
-    servo_center: 82.5          # 直行中位舵角
-    servo_min: 35.0             # 右极限
-    servo_max: 130.0            # 左极限
-    servo_deg_per_curv: 68.0    # 物理转向增益
-    max_curvature: 0.70         # ★关键: (130-82.5)/68 = 0.70，匹配物理极限
-    steer_gain: 1.35            # 纯追踪 P 增益
-    max_k_rate: 0.30            # 每帧曲率变化上限
+    # ===== 2. 舵机标定 (本车实测: 中位 82.5, 物理范围 35~130) =====
+    servo_center: 82.5          # 直行中位舵角 [deg]
+    servo_min: 35.0             # 机械物理右极限 [deg]
+    servo_max: 130.0            # 机械物理左极限 [deg]
+    servo_deg_per_curv: 68.0    # 转向增益 [deg/(1/m)]
+    max_curvature: 0.70         # 物理最大曲率 [1/m]
+    steer_gain: 1.35            # 纯追踪中轴导向系数
+    steer_gain_sharp: 1.45      # 直角弯快速响应转向增益
+    max_k_rate: 0.25            # 每帧曲率变化上限 (杜绝猛打方向)
 
-    # ===== 3. 状态机门限 (v7: 直道不再被噪声误触发弯道) =====
-    curv_enter_corner: 0.16     # ★直道->弯道: 原 0.10 太敏感, 直道会误锁弯道
-    curv_exit_corner: 0.07      # ★弯道->直道: 原 0.05 太晚, 直道会残留转向
-    lookahead_straight: 1.60    # 直道前瞻
-    lookahead_corner: 0.85      # 弯道前瞻缩短，贴内线
-    lookahead_rightangle: 0.70  # ★直角弯前瞻更短 (v7 新增)
+    # ===== 3. 直道自适应与状态机门限 =====
+    curv_enter_corner: 0.18     # 进入常规弯道曲率阈值 [1/m]
+    curv_exit_corner: 0.08      # 退出常规弯道曲率阈值 [1/m]
+    lookahead_straight: 1.60    # 直道前瞻距离 [m]
+    lookahead_corner: 1.05      # 弯道前瞻距离 [m]
 
-    # ===== 3b. 直角弯判据 (v7 新增) =====
-    curv_enter_rightangle: 0.45 # 弯道->直角 的曲率门限 (持续满舵)
-    curv_exit_rightangle: 0.30  # 直角->弯道 的曲率门限
-    ra_hold_s: 0.30             # 直角需持续确认时间 [s]
-    ra_min_cones: 4             # 直角判据所需近处锥桶数
-    ra_cone_x_max: 1.80         # 近处锥桶纵向范围 [m]
-    ra_wall_y_spread: 1.60      # 横向锥桶墙 y 跨度门限 [m]
-    ra_wall_x_spread: 0.80      # 横向锥桶墙 x 跨度上限 [m]
-    ra_bearing_deg: 55.0        # 目标点方位角门限 [deg]
+    # ===== 4. 自适应聚类与半径推广 =====
+    cd_range_min: 0.25
+    cd_range_max: 4.20
+    cd_fov_deg: 105.0
+    cd_gap_base: 0.045
+    cd_gap_slope: 0.020
+    cd_min_points: 3
+    cd_min_extent: 0.018
+    cd_max_extent: 0.30
+    cd_cone_radius: 0.08
+    win_x_min: 0.10
 
-    # ===== 3c. 无锥桶 -> 黄线巡线 (v7 新增) =====
-    min_cones_for_track: 2      # 视为"有锥桶赛道"的最少锥桶数
-    cone_lost_timeout: 1.20     # 连续无锥桶多久切黄线 [s]
-    cone_found_timeout: 0.40    # 重新看到锥桶多久切回 [s]
-    yellow_enable_topic: "/yellow_tracking_enable"
+    # ===== 5. 车体系短时记忆 =====
+    mem_ttl: 1.5
+    mem_match_gate: 0.45
+    mem_min_hits: 2
+    track_width_nominal: 1.50
 
-    # ===== 3d. 直道稳定化 (v7 新增, 解决"直道画龙") =====
-    aim_y_lpf: 0.40             # aim_y 低通系数 (越大越平滑)
-    aim_y_deadband: 0.04        # aim_y 死区 [m]
-    aim_mid_deadband: 0.08      # 左右分组中缝死区 [m]
-    single_side_clamp: 0.40     # 只看到单侧时 aim_y 限幅 [m]
-    straight_k_deadband: 0.015  # 直道曲率死区 [1/m]
-    ego_speed: 0.90             # 记忆自车运动补偿估计车速 [m/s]
+    # ===== 6. 直角弯检测专用 =====
+    sharp_front_detect_dist: 2.80   # 直角弯前方外侧挡墙检测距离 [m]
+    sharp_inner_max_dist: 1.80      # 直角弯内折顶点最大搜索距离 [m]
 
-    # ===== 4. 安全与起步 =====
+    # ===== 7. 弧线安全避障层 =====
+    safe_enable: true
+    safe_lookahead: 1.30
     safe_radius: 0.26
+    safe_front: 0.20
+    safe_curv_steps: 21
+
+    # ===== 8. 起步保护 =====
     start_guard_s: 1.5
     start_k_max: 0.20
 
-    # ===== 5. PID (安全版，不破坏 v5) =====
-    pid_kp: 0.00                # ★关键: 关闭 PID 的 P，让 steer_gain=1.35 当 P
-    pid_ki: 0.005               # ★关键: 从 0.005 起步，不要 0.02/0.05
-    pid_kd: 0.00                # ★关键: 关闭 D，避免放大激光噪声
-    pid_i_limit: 0.02           # 积分限幅，防饱和
-    pid_i_decay: 0.90           # 直道积分泄放系数
-    pid_i_enable_corner: false  # 弯道冻结积分
+    # ===== 9. 运行记录与调试 =====
+    debug_every: 5
+    debug_csv: 1
+    debug_csv_dir: "~/racecar/logs"
