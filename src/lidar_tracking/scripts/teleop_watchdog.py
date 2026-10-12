@@ -11,6 +11,11 @@
       自己的急停消息会被识别并忽略, 不会自我唤醒。
       所以它必须跑在【独立终端 / nohup 常驻】, 这样 Ctrl-C 掉跟踪节点时它还活着。
 
+v2: 同时监听第二控制话题 /car_cmd_vel (黄线巡线节点用的标准速度接口)。
+      两个话题里【任意一个】有活动都算"有控制", 这样 lidar_tracking 进入
+      YELLOW 状态 (停止发 /teleop_cmd_vel、把控制权交给黄线) 时,
+      看门狗不会误判为失联而连发急停去抢黄线的控制权。
+
 用法:
     source /opt/ros/humble/setup.bash
     source ~/racecar/install/setup.bash
@@ -18,7 +23,8 @@
     ros2 run lidar_tracking teleop_watchdog     # 编译安装后可直接 ros2 run
 
 参数:
-    --topic   控制话题 (默认 /teleop_cmd_vel)
+    --topic   主控制话题 (默认 /teleop_cmd_vel, 也是急停发布话题)
+    --topic2  次级控制话题 (默认 /car_cmd_vel, 只监听不发布; 设为空串可关闭)
     --timeout 静默判定时长 [s] (默认 0.6; 控制器按 10Hz 发, 0.6s 足够宽容)
     --rate    急停发送频率 [Hz] (默认 20)
 """
@@ -62,7 +68,7 @@ def find_servo_center(default=80.0):
 
 
 class Watchdog(Node):
-    def __init__(self, topic, timeout, rate):
+    def __init__(self, topic, topic2, timeout, rate):
         super().__init__('teleop_watchdog')
         self.center = find_servo_center()
         self.timeout = timeout
@@ -70,6 +76,11 @@ class Watchdog(Node):
         self.firing = False
         self.pub = self.create_publisher(Twist, topic, QoSProfile(depth=5))
         self.create_subscription(Twist, topic, self.on_msg, QoSProfile(depth=10))
+        # 次级话题: 只监听, 不发布急停 (黄线节点用的标准速度接口)
+        if topic2 and topic2 != topic:
+            self.create_subscription(
+                Twist, topic2, self.on_other, QoSProfile(depth=10))
+            self.get_logger().info('同时监听次级控制话题 %s' % topic2)
         self.stop = Twist()
         self.stop.linear.x = STOP_MOTOR
         self.stop.angular.z = self.center
@@ -83,13 +94,20 @@ class Watchdog(Node):
         return (abs(msg.linear.x - STOP_MOTOR) < 1e-6
                 and abs(msg.angular.z - self.center) < 0.5)
 
-    def on_msg(self, msg):
-        if self.firing and self._is_own_stop(msg):
-            return                      # 自己的急停, 不算"控制恢复"
+    def _activity(self):
         self.last_rx = time.monotonic()
         if self.firing:
             self.firing = False
             self.get_logger().info('检测到控制恢复 -> 暂停急停, 交还给控制器')
+
+    def on_msg(self, msg):
+        if self.firing and self._is_own_stop(msg):
+            return                      # 自己的急停, 不算"控制恢复"
+        self._activity()
+
+    def on_other(self, msg):
+        # /car_cmd_vel 上的任何指令都视为"有控制" (我们不在这个话题发急停)
+        self._activity()
 
     def tick(self):
         silent = time.monotonic() - self.last_rx
@@ -106,12 +124,14 @@ class Watchdog(Node):
 def main():
     ap = argparse.ArgumentParser(description='控制静默急停看门狗')
     ap.add_argument('--topic', default='/teleop_cmd_vel')
+    ap.add_argument('--topic2', default='/car_cmd_vel',
+                    help='次级控制话题(默认 /car_cmd_vel, 空串关闭)')
     ap.add_argument('--timeout', type=float, default=0.6, help='静默判定时长 [s]')
     ap.add_argument('--rate', type=float, default=20.0, help='急停发送频率 [Hz]')
     args = ap.parse_args()
 
     rclpy.init()
-    node = Watchdog(args.topic, args.timeout, args.rate)
+    node = Watchdog(args.topic, args.topic2, args.timeout, args.rate)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

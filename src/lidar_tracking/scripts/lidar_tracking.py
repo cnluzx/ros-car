@@ -644,9 +644,35 @@ class LidarTrackingNode(Node):
 
     def __init__(self):
         super().__init__('lidar_tracking_node')
+        # ---- 参数加载 (三级优先) ----
+        #   1) 代码内置默认值 DEFAULTS
+        #   2) 直接读工作空间 config/param.yaml (直接 python3 跑脚本时也能用)
+        #   3) launch 传入的 parameters=[param.yaml] 覆盖 (优先级最高)
+        # 这样无论有没有 launch, config/param.yaml 都是唯一调参入口。
         params = dict(DEFAULTS)
         file_params, ppath = load_param_yaml()
         params.update(file_params)
+
+        # 全部声明成 ROS 参数, "默认值"= 上面合并后的值。
+        # launch 的 parameters=[...] 会作为 override 叠在最上面。
+        for k, v in params.items():
+            try:
+                if isinstance(v, bool):
+                    self.declare_parameter(k, bool(v))
+                elif isinstance(v, int):
+                    self.declare_parameter(k, int(v))
+                elif isinstance(v, float):
+                    self.declare_parameter(k, float(v))
+                else:
+                    self.declare_parameter(k, str(v))
+            except Exception:
+                # 参数已声明 / 类型异常时跳过, 不让节点起不来
+                pass
+        try:
+            params = {k: self.get_parameter(k).value for k in params}
+        except Exception:
+            pass
+
         self.params = params
         self.tracker = ConeTracker(params)
         self.topic = params['topic']
