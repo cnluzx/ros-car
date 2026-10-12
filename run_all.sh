@@ -15,12 +15,14 @@
 #      bash ~/racecar/run_all.sh --no-cone       # 不启动可视化面板
 #      bash ~/racecar/run_all.sh --port 8081     # 指定面板端口 (默认 8080)
 #      bash ~/racecar/run_all.sh --delay 5       # 循迹启动前额外等待秒数 (默认 3)
+#      bash ~/racecar/run_all.sh --check         # 只检查环境(source ROS), 不启动任何进程
 #
 #  Ctrl-C 会停掉本脚本启动的所有子进程, 并补发一次底盘急停。
 #  实时日志:  tail -f ~/racecar/logs/run_all_*/lidar_tracking.log
 # =============================================================================
 
-set -u
+# 注意: 不能开 set -u (nounset)。ROS 的 /opt/ros/humble/setup.bash 会引用
+# 未定义变量 (如 AMENT_TRACE_SETUP_FILES)，开了 set -u 直接报错退出。
 
 WS="$HOME/racecar"
 TOPIC="/teleop_cmd_vel"
@@ -30,6 +32,7 @@ DELAY=3
 START_HW=1
 START_WD=1
 START_CONE=1
+CHECK_ONLY=0
 
 usage() {
   sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
@@ -41,6 +44,7 @@ while [ $# -gt 0 ]; do
     --no-hw)        START_HW=0 ;;
     --no-watchdog)  START_WD=0 ;;
     --no-cone)      START_CONE=0 ;;
+    --check)        CHECK_ONLY=1 ;;
     --port)         shift; PORT="${1:-8080}" ;;
     --delay)        shift; DELAY="${1:-3}" ;;
     -h|--help)      usage ;;
@@ -51,6 +55,13 @@ done
 
 source /opt/ros/humble/setup.bash
 source "$WS/install/setup.bash"
+
+if [ "${CHECK_ONLY:-0}" = 1 ]; then
+  echo "[run_all] 环境检查通过: ROS + $WS/install 已 source, 未启动任何进程"
+  echo "[run_all]   ros2: $(command -v ros2)"
+  echo "[run_all]   lidar_tracking 可执行: $(ls "$WS/install/lidar_tracking/lib/lidar_tracking/lidar_tracking" 2>/dev/null || echo '缺失')"
+  exit 0
+fi
 
 LOGDIR="$WS/logs/run_all_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$LOGDIR"
