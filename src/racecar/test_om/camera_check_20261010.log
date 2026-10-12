@@ -1,0 +1,33 @@
+[INFO] [launch]: All log files can be found below /home/davinci-mini/.ros/log/2023-11-22-06-44-24-306655-davinci-mini-138617
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [usb_cam_node_exe-1]: process started with pid [138857]
+[usb_cam_node_exe-1] [INFO] [1700606664.844733060] [usb_cam]: camera_name value: default_cam
+[usb_cam_node_exe-1] [WARN] [1700606664.844998938] [usb_cam]: framerate: 30.000000
+[usb_cam_node_exe-1] [INFO] [1700606664.850195270] [usb_cam]: using default calibration URL
+[usb_cam_node_exe-1] [INFO] [1700606664.850292771] [usb_cam]: camera calibration URL: file:///home/davinci-mini/.ros/camera_info/default_cam.yaml
+[usb_cam_node_exe-1] [ERROR] [1700606664.850442398] [camera_calibration_parsers]: Unable to open camera calibration file [/home/davinci-mini/.ros/camera_info/default_cam.yaml]
+[usb_cam_node_exe-1] [WARN] [1700606664.850471106] [usb_cam]: Camera calibration file /home/davinci-mini/.ros/camera_info/default_cam.yaml not found
+[usb_cam_node_exe-1] [INFO] [1700606664.918522275] [usb_cam]: Starting 'default_cam' (/dev/video0) at 320x240 via mmap (yuyv) at 30 FPS
+[usb_cam_node_exe-1] [swscaler @ 0xaaaab14f7120] No accelerated colorspace conversion found from yuv422p to rgb24.
+[usb_cam_node_exe-1] This device supports the following formats:
+[usb_cam_node_exe-1] 	Motion-JPEG 1280 x 720 (60 Hz)
+[usb_cam_node_exe-1] 	Motion-JPEG 320 x 240 (120 Hz)
+[usb_cam_node_exe-1] 	Motion-JPEG 640 x 480 (120 Hz)
+[usb_cam_node_exe-1] 	Motion-JPEG 800 x 600 (60 Hz)
+[usb_cam_node_exe-1] 	YUYV 4:2:2 1280 x 720 (9 Hz)
+[usb_cam_node_exe-1] 	YUYV 4:2:2 320 x 240 (30 Hz)
+[usb_cam_node_exe-1] 	YUYV 4:2:2 640 x 480 (30 Hz)
+[usb_cam_node_exe-1] 	YUYV 4:2:2 800 x 600 (21 Hz)
+[usb_cam_node_exe-1] [INFO] [1700606665.692332406] [usb_cam]: Setting 'brightness' to 50
+[usb_cam_node_exe-1] [INFO] [1700606665.734339083] [usb_cam]: Setting 'white_balance_temperature_auto' to 1
+[usb_cam_node_exe-1] [INFO] [1700606665.734481252] [usb_cam]: Setting 'exposure_auto' to 3
+[usb_cam_node_exe-1] [INFO] [1700606665.744004363] [usb_cam]: Setting 'focus_auto' to 0
+[usb_cam_node_exe-1] unknown control 'focus_auto'
+[usb_cam_node_exe-1] 
+[usb_cam_node_exe-1] [INFO] [1700606665.825486730] [usb_cam]: Timer triggering every 33 ms
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[ERROR] [usb_cam_node_exe-1]: process[usb_cam_node_exe-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [usb_cam_node_exe-1]: sending signal 'SIGTERM' to process[usb_cam_node_exe-1]
+[usb_cam_node_exe-1] [INFO] [1700606891.005742122] [rclcpp]: signal_handler(signum=15)
+[usb_cam_node_exe-1] [WARN] [1700606891.006058542] [usb_cam]: Shutting down
+[INFO] [usb_cam_node_exe-1]: process has finished cleanly [pid 138857]

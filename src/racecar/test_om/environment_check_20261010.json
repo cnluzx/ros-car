@@ -1,0 +1,24 @@
+{
+  "root_conda_python": "3.9.2",
+  "ros_python": "3.10.12",
+  "root_conda_model_inference": "passed",
+  "python310_model_inference": "5 runs passed; mean 10.5 ms",
+  "camera": "320x240 yuv422_yuy2",
+  "ros_dry_run": {
+    "mask_messages": 328,
+    "overlay_messages": 326,
+    "command_messages": 334,
+    "nonzero_commands": 0,
+    "state": "LOST; no valid yellow-line rows in current camera view"
+  },
+  "packages": {
+    "aclruntime": "0.0.2",
+    "ais_bench": "0.0.2",
+    "pybind11": "2.11.1",
+    "tqdm": "4.67.1",
+    "attrs": "22.2.0"
+  },
+  "model_permissions_before": "664",
+  "model_permissions_after": "644",
+  "original_backup": "/home/davinci-mini/racecar/src/racecar/test_om/test_infer.py.bak_20261010_environment"
+}

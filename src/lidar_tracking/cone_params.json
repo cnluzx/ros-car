@@ -1,0 +1,33 @@
+{
+  "params": {
+    "range_min": 0.15,
+    "range_max": 5.5,
+    "gap_base": 0.045,
+    "gap_slope": 0.02,
+    "min_points": 3,
+    "min_extent": 0.018,
+    "max_extent": 0.25,
+    "cone_radius": 0.1,
+    "min_dist": 0.7,
+    "angle_offset": 0.0,
+    "auto_offset": 0,
+    "left_max_y": 2.5,
+    "right_max_y": 2.5,
+    "fwd_max_x": 4.0,
+    "fwd_min_x": -0.3,
+    "min_sep_axis": 0.1,
+    "use_tangent": 1,
+    "pose_source": "imu",
+    "odom_topic": "/odom_combined",
+    "imu_topic": "/IMU_data",
+    "path_memory_s": 6.0,
+    "tangent_radius": 1.8,
+    "tangent_min_pts": 3,
+    "max_heading_err": 55.0,
+    "freeze_on_unreliable": 1,
+    "use_flip_guard": 1,
+    "flip_ratio": 2.0,
+    "flip_min_cones": 5
+  },
+  "view_scale": 90.0
+}

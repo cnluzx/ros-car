@@ -1,0 +1,47 @@
+yellow_zigzag_follower:
+  ros__parameters:
+    acceleration_limit: 0.7
+    angular_rate_limit: 3.0
+    band_coverage: 0.3
+    blur_kernel: 5
+    camera_center_x_ratio: 0.5
+    camera_timeout_sec: 0.5
+    close_kernel: 5
+    cmd_topic: "car_cmd_vel"
+    corner_speed_cap: 0.14
+    corner_threshold: 0.2
+    detected_topic: "/yellow_track_detected"
+    enable_topic: "/yellow_tracking_enable"
+    enabled_on_start: false
+    far_y_ratio: 0.8
+    hsv_lower: [18, 35, 40]
+    hsv_upper: [45, 255, 255]
+    image_topic: "/image_raw"
+    k_heading: 0.38
+    kd: 0.06
+    kp: 1.25
+    lookahead_y_ratio: 0.86
+    max_angular: 0.85
+    max_lane_gap_ratio: 0.95
+    max_run_ratio: 0.18
+    max_speed: 0.24
+    min_center_points: 4
+    min_lane_gap_ratio: 0.12
+    min_pair_rows: 2
+    min_run_px: 3
+    min_span_ratio: 0.1
+    min_speed: 0.09
+    near_y_ratio: 0.92
+    open_kernel: 3
+    roi_bottom_half_width_ratio: 0.47
+    roi_center_x_ratio: 0.5
+    roi_end_ratio: 0.97
+    roi_start_ratio: 0.78
+    roi_top_half_width_ratio: 0.36
+    save_path: "/home/davinci-mini/racecar/yellow_tuned.yaml"
+    scan_half_band: 3
+    scan_rows: 15
+    show_debug: false
+    single_boundary_memory_sec: 0.8
+    single_boundary_speed_cap: 0.13
+    tune_mode: false

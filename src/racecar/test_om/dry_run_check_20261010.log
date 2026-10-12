@@ -1,0 +1,37 @@
+[INFO] acl init success
+[INFO] open device 0 success
+[INFO] create new context
+[INFO] load model /home/davinci-mini/racecar/src/racecar/test_om/line_seg_v2_310B4_int8.om success
+[INFO] create model description success
+[INFO] [1700606854.171252764] [follower]: Yellow-line follower started: enable_motion=False, output=/car_cmd_vel, model=/home/davinci-mini/racecar/src/racecar/test_om/line_seg_v2_310B4_int8.om
+[INFO] [1700606854.212901395] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=35.4 motion=False
+[INFO] [1700606854.715138504] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.5 motion=False
+[INFO] [1700606855.220156311] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=19.4 motion=False
+[INFO] [1700606855.755362492] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.7 motion=False
+[INFO] [1700606856.254850423] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.2 motion=False
+[INFO] [1700606856.758958949] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.3 motion=False
+[INFO] [1700606857.263598065] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.3 motion=False
+[INFO] [1700606857.798332344] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=17.8 motion=False
+[INFO] [1700606858.299272500] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.5 motion=False
+[INFO] [1700606858.802681476] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606859.306681522] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606859.842487626] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.0 motion=False
+[INFO] [1700606860.346559798] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606860.882576134] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606861.382493486] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.0 motion=False
+[INFO] [1700606861.886912162] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.4 motion=False
+[INFO] [1700606862.390741143] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606862.926663332] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.0 motion=False
+[INFO] [1700606863.463942120] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=19.2 motion=False
+[INFO] [1700606863.998601774] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606864.502600694] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.1 motion=False
+[INFO] [1700606865.038488425] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.0 motion=False
+[INFO] [1700606865.538757739] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=19.8 motion=False
+[INFO] [1700606866.040531217] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.0 motion=False
+[INFO] [1700606866.544565368] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.0 motion=False
+[INFO] [1700606867.045381168] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.6 motion=False
+[INFO] [1700606867.548328243] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=17.7 motion=False
+[INFO] [1700606868.052987047] [follower]: LOST | error=0.0 steer=0.000 speed=0.00 valid_rows=0 infer_ms=18.3 motion=False
+[INFO] unload model success, model Id is 1
+[INFO] end to reset device 0
+[INFO] end to finalize acl
